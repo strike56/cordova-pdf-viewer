@@ -1,0 +1,12 @@
+{
+  "name": "cordova-pdf-viewer",
+  "license": "MIT",
+  "main": "index.js",
+  "keywords": [
+    "viewer",
+    "pdf",
+    "cordova",
+    "plugin"
+  ],
+  "version": "1.0.0"
+}
