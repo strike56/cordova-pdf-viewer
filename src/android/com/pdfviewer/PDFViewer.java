@@ -1,6 +1,7 @@
 package com.pdfviewer;
 
 import android.content.Intent;
+import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -19,11 +20,32 @@ public class PDFViewer extends CordovaPlugin {
         return false;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        this.callbackContext.success("PDFViewer closed");
+    }
+
     private void showPdf(JSONArray args) throws JSONException {
         final Intent i = new Intent(cordova.getContext(), PDFViewerActivity.class);
-        i.putExtra("fileUrl", args.getString(0));
-        i.putExtra("title", args.getString(1));
-        i.putExtra("scrollDir", args.getString(2));
+        Log.d("fileUrl", args.getString(0));
+        Log.d("title", args.getString(1));
+
+        String fileUrl = "";
+        String title = "PDFViewer";
+        String scrollDir = "vertical";
+        if(args.length() >= 1 && args.getString(0) != null) {
+            fileUrl = args.getString(0);
+        }
+        if(args.length() >= 2 && args.getString(1) != null) {
+            title = args.getString(1);
+        }
+        if(args.length() >= 3 && args.getString(2) != null) {
+            scrollDir = args.getString(2);
+        }
+        i.putExtra("fileUrl", fileUrl);
+        i.putExtra("title", title);
+        i.putExtra("scrollDir", scrollDir);
         this.cordova.getActivity().startActivity(i);
     }
 }

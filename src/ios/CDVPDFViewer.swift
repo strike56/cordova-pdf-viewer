@@ -17,7 +17,6 @@ import PDFReader
     @objc(showPdf:)
     func showPdf(command: CDVInvokedUrlCommand) {
         cmd = command
-        print(command.argument(at: 0), "CMD")
         var url = ""
         var title = "PDF Preview"
         var scrollDir = "horizontal"

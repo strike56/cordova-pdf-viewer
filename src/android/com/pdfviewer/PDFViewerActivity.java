@@ -1,23 +1,16 @@
 package com.pdfviewer;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.github.barteksc.pdfviewer.PDFView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.io.File;
 
 
 public class PDFViewerActivity extends AppCompatActivity {
@@ -34,39 +27,18 @@ public class PDFViewerActivity extends AppCompatActivity {
         this.setTitle(title);
 
         PDFView pdfView = (PDFView) findViewById(R.id.pdfView);
-        getPdf(pdfView, url);
-    }
+        final File file = new File(Uri.parse(url).getPath());
+        PDFView.Configurator configurator = pdfView.fromFile(file)
+                .enableAnnotationRendering(false)
+                .defaultPage(0)
+                .enableAntialiasing(true);
+        if(scrollDir.equals("horizontal")) {
+            configurator.swipeHorizontal(true);
+        }
+        configurator.load();
 
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+        progressBar.setVisibility(View.GONE);
 
-    private void getPdf(PDFView pdfView, String url) {
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                final ProgressBar spinner = (ProgressBar)findViewById(R.id.progressBar1);
-                spinner.setVisibility(View.VISIBLE);
-            }
-            @Override
-            protected Void doInBackground(Void... voids) {
-                try {
-                    InputStream input = new URL(url).openStream();
-                    pdfView.fromStream(input)
-                            .enableAnnotationRendering(false)
-                            .defaultPage(0)
-                            .enableAntialiasing(true).load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                final ProgressBar spinner = (ProgressBar)findViewById(R.id.progressBar1);
-                spinner.setVisibility(View.GONE);
-            }
-        }.execute();
     }
 }
