@@ -40,6 +40,7 @@
         <framework src="src/android/pdfviewer.gradle" custom="true" type="gradleReference"/>
         <source-file src="src/android/com/pdfviewer/PDFViewer.java" target-dir="src/com/pdfviewer" />
         <source-file src="src/android/com/pdfviewer/PDFViewerActivity.java" target-dir="src/com/pdfviewer" />
+        <source-file src="src/android/com/pdfviewer/PDFEventReceiver.java" target-dir="src/com/pdfviewer" />
         <source-file src="src/android/res/layout/activity_pdf_viewer.xml" target-dir="res/layout" />
         <hook type="after_plugin_install" src="hooks/hookR.js" />
     </platform>

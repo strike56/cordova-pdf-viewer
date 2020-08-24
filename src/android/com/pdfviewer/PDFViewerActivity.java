@@ -1,5 +1,7 @@
 package com.pdfviewer;
 
+import com.appsolute_mobility.my.debug.R;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,6 +13,8 @@ import android.widget.ProgressBar;
 import com.github.barteksc.pdfviewer.PDFView;
 
 import java.io.File;
+
+import static com.pdfviewer.PDFEventReceiver.FLUSH_AWAY;
 
 
 public class PDFViewerActivity extends AppCompatActivity {
@@ -40,5 +44,13 @@ public class PDFViewerActivity extends AppCompatActivity {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         progressBar.setVisibility(View.GONE);
 
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Intent intent = new Intent();
+        intent.setAction(FLUSH_AWAY);
+        sendBroadcast(intent);
     }
 }

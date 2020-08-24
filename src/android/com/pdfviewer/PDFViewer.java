@@ -1,15 +1,19 @@
 package com.pdfviewer;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.util.Log;
+import android.content.IntentFilter;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import static com.pdfviewer.PDFEventReceiver.FLUSH_AWAY;
+
 public class PDFViewer extends CordovaPlugin {
     CallbackContext callbackContext;
+    private static final int ACTIVITY_REQUEST_CODE = 123;
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if(action.equals("showPdf")) {
@@ -20,16 +24,13 @@ public class PDFViewer extends CordovaPlugin {
         return false;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        this.callbackContext.success("PDFViewer closed");
-    }
+
 
     private void showPdf(JSONArray args) throws JSONException {
         final Intent i = new Intent(cordova.getContext(), PDFViewerActivity.class);
-        Log.d("fileUrl", args.getString(0));
-        Log.d("title", args.getString(1));
+        BroadcastReceiver pdfReceiver = new PDFEventReceiver(this.callbackContext);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(FLUSH_AWAY);
 
         String fileUrl = "";
         String title = "PDFViewer";
@@ -46,6 +47,8 @@ public class PDFViewer extends CordovaPlugin {
         i.putExtra("fileUrl", fileUrl);
         i.putExtra("title", title);
         i.putExtra("scrollDir", scrollDir);
+
         this.cordova.getActivity().startActivity(i);
+        this.cordova.getActivity().registerReceiver(pdfReceiver, filter);
     }
 }
