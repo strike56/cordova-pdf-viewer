@@ -1,7 +1,5 @@
 package com.pdfviewer;
 
-import com.example.tested.MainActivity;
-import com.example.tested.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
