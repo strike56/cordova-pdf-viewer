@@ -1,7 +1,5 @@
 package com.pdfviewer;
 
-import com.appsolute_mobility.my.debug.R;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
