@@ -29,8 +29,9 @@ import PDFReader
                 scrollDir = command.arguments[2] as! String
             }
         }
-        let remotePDFDocumentURL = URL(string: url)!
-        let document = PDFDocument(url: remotePDFDocumentURL)!
+        guard let file = FileManager.default.contents(atPath: url) else { return }
+
+        let document = PDFDocument(fileData: file, fileName: title)!
         let readerController = PDFViewController.createNew(with: document, title: title, actionStyle: .activitySheet, backButton: createBackButton(command: command));
         readerController.scrollDirection = scrollDir == "vertical" ? .vertical : .horizontal
         readerController.modalPresentationStyle = .fullScreen
@@ -41,7 +42,9 @@ import PDFReader
         let navController = UINavigationController(rootViewController: readerController)
 
         if url.count > 0 {
-           self.viewController.present(navController, animated: false)
+            self.viewController.present(navController, animated: false, completion: {
+                navController.presentationController?.presentedView?.gestureRecognizers?[0].isEnabled = false;
+            })
         }
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus.error, messageAs: "Not correct url: \(url)"), callbackId: cmd.callbackId)
     }
